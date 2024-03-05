@@ -1,0 +1,2 @@
+create database belajar_spring_restful_api;
+use belajar_spring_restful_api;
