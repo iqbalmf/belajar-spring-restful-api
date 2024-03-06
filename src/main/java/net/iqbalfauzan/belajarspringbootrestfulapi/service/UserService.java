@@ -1,7 +1,5 @@
 package net.iqbalfauzan.belajarspringbootrestfulapi.service;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.RegisterUserRequest;
@@ -12,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Set;
 
 /**
  * Created by IqbalMF on 2024.
@@ -27,12 +23,13 @@ public class UserService {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private ValidationService validationService;
+
     @Transactional
     public void register(RegisterUserRequest request) {
-        Set<ConstraintViolation<RegisterUserRequest>> constraintViolations = validator.validate(request);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(constraintViolations);
-        }
+        validationService.validate(request);
+
         if (userRepository.existsById(request.getUsername())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already registered");
         }
