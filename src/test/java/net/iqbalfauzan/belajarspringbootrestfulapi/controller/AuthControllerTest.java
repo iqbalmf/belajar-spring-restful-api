@@ -18,8 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -117,7 +117,7 @@ class AuthControllerTest {
         ).andDo(result -> {
             WebResponse<TokenResponse> response = mapper.readValue(result.getResponse().getContentAsString(),
                     new TypeReference<>() {
-            });
+                    });
 
             assertNull(response.getErrors());
             assertNotNull(response.getData().getToken());
@@ -127,6 +127,53 @@ class AuthControllerTest {
             assertNotNull(userDB);
             assertEquals(userDB.getToken(), response.getData().getToken());
             assertEquals(userDB.getTokenExpiredAt(), response.getData().getExpiredAt());
+        });
+    }
+
+    @Test
+    @DisplayName("Auth Logout but return Failed")
+    void testLogoutFailed() throws Exception {
+        mockMvc.perform(
+                delete("/api/auth/logout")
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isUnauthorized()
+        ).andDo(result -> {
+            WebResponse<String> response = mapper.readValue(result.getResponse().getContentAsString(),
+                    new TypeReference<>() {
+                    });
+            assertNotNull(response.getErrors());
+        });
+    }
+
+    @Test
+    @DisplayName("Auth Logout but return Success")
+    void testLogoutSuccess() throws Exception {
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword(BCrypt.hashpw("test", BCrypt.gensalt()));
+        user.setName("test");
+        user.setTokenExpiredAt(System.currentTimeMillis() + 10000000L);
+        user.setToken("testtoken");
+        repository.save(user);
+
+        mockMvc.perform(
+                delete("/api/auth/logout")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("x-api-header", "testtoken")
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(result -> {
+            WebResponse<String> response = mapper.readValue(result.getResponse().getContentAsString(),
+                    new TypeReference<>() {
+                    });
+            assertNull(response.getErrors());
+            User userDB = repository.findById("test").orElse(null);
+            assertEquals("OK", response.getData());
+
+            assertNotNull(userDB);
+            assertNull(userDB.getToken());
+            assertNull(userDB.getTokenExpiredAt());
         });
     }
 }
