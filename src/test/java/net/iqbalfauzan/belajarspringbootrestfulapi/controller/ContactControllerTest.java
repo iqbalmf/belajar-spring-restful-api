@@ -2,9 +2,11 @@ package net.iqbalfauzan.belajarspringbootrestfulapi.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.iqbalfauzan.belajarspringbootrestfulapi.entity.Contact;
 import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.ContactResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.CreateContactRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.UpdateContactRequest;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.WebResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.repository.ContactRepository;
 import net.iqbalfauzan.belajarspringbootrestfulapi.repository.UserRepository;
@@ -17,10 +19,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -159,6 +163,120 @@ class ContactControllerTest {
             WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
             });
             assertNotNull(response.getErrors());
+        });
+    }
+
+    @Test
+    @DisplayName("Get contact return success")
+    void testGetContactSuccess() throws Exception{
+        User user = userRepository.findById("test").orElseThrow();
+        Contact contact = new Contact();
+        contact.setId(UUID.randomUUID().toString());
+        contact.setUser(user);
+        contact.setFirstname("Iqbal");
+        contact.setLastname("Fauzan");
+        contact.setEmail("test@test.com");
+        contact.setPhone("123123132");
+        contactRepository.save(contact);
+
+        mockMvc.perform(
+                get("/api/contacts/" + contact.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("x-api-header", "testtoken")
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(result -> {
+            WebResponse<ContactResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNull(response.getErrors());
+            assertEquals(contact.getId(), response.getData().getId());
+            assertEquals(contact.getFirstname(), response.getData().getFirstName());
+            assertEquals(contact.getLastname(), response.getData().getLastName());
+            assertEquals(contact.getEmail(), response.getData().getEmail());
+            assertEquals(contact.getPhone(), response.getData().getPhone());
+        });
+    }
+
+    @Test
+    @DisplayName("Update Contact request but return bad request")
+    void testUpdateContactBadRequest() throws Exception{
+        UpdateContactRequest request = new UpdateContactRequest();
+        request.setFirstName("");
+        request.setEmail("salahformatemail");
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/contacts/1234")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .header("x-api-header", "testtoken")
+        ).andExpectAll(
+                status().isBadRequest()
+        ).andDo(result -> {
+            WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNotNull(response.getErrors());
+        });
+    }
+
+    @Test
+    @DisplayName("Update Contact request but return Unauthorized")
+    void testUpdateContactUnAuthorized() throws Exception{
+        UpdateContactRequest request = new UpdateContactRequest();
+        request.setFirstName("new firstname");
+        request.setEmail("new@test.com");
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/contacts/1234")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+        ).andExpectAll(
+                status().isUnauthorized()
+        ).andDo(result -> {
+            WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNotNull(response.getErrors());
+        });
+    }
+
+    @Test
+    @DisplayName("Update Contact request return Success")
+    void testUpdateContactSuccess() throws Exception{
+        User user = userRepository.findById("test").orElseThrow();
+        Contact contact = new Contact();
+        contact.setId(UUID.randomUUID().toString());
+        contact.setUser(user);
+        contact.setFirstname("Iqbal");
+        contact.setLastname("Fauzan");
+        contact.setEmail("test@test.com");
+        contact.setPhone("123123132");
+        contactRepository.save(contact);
+
+        UpdateContactRequest request = new UpdateContactRequest();
+        request.setFirstName("Iqbal New");
+        request.setLastName("Fauzan New");
+        request.setEmail("new@test.com");
+        request.setPhone("087823132132");
+
+        mockMvc.perform(
+                put("/api/contacts/"+ contact.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .header("x-api-header", "testtoken")
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(result -> {
+            WebResponse<ContactResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNull(response.getErrors());
+            assertEquals(request.getFirstName(), response.getData().getFirstName());
+            assertEquals(request.getLastName(), response.getData().getLastName());
+            assertEquals(request.getEmail(), response.getData().getEmail());
+            assertEquals(request.getPhone(), response.getData().getPhone());
+            assertTrue(contactRepository.existsById(response.getData().getId()));
         });
     }
 }

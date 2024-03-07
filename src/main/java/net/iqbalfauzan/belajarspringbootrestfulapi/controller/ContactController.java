@@ -3,6 +3,7 @@ package net.iqbalfauzan.belajarspringbootrestfulapi.controller;
 import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.ContactResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.CreateContactRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.UpdateContactRequest;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.WebResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,27 @@ public class ContactController {
         ContactResponse contactResponse = contactService.create(user, request);
         return WebResponse.<ContactResponse>builder().data(contactResponse).build();
     }
+
     @GetMapping(
             path = "/api/contacts/{contactId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public WebResponse<ContactResponse> get(User user, @PathVariable("contactId") String id){
+    public WebResponse<ContactResponse> get(User user, @PathVariable("contactId") String id) {
         ContactResponse contactResponse = contactService.get(user, id);
+        return WebResponse.<ContactResponse>builder().data(contactResponse).build();
+    }
+
+    @PutMapping(
+            path = "/api/contacts/{contactId}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<ContactResponse> update(User user,
+                                               @RequestBody UpdateContactRequest request,
+                                               @PathVariable("contactId") String contactId) {
+        request.setId(contactId);
+
+        ContactResponse contactResponse = contactService.update(user, request);
         return WebResponse.<ContactResponse>builder().data(contactResponse).build();
     }
 }

@@ -4,6 +4,7 @@ import net.iqbalfauzan.belajarspringbootrestfulapi.entity.Contact;
 import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.ContactResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.CreateContactRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.UpdateContactRequest;
 import net.iqbalfauzan.belajarspringbootrestfulapi.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,21 @@ public class ContactService {
     public ContactResponse get(User user, String id){
         Contact contact = repository.findFirstByUserAndId(user, id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contact not found"));
+
+        return toContactResponse(contact);
+    }
+
+    @Transactional
+    public ContactResponse update(User user, UpdateContactRequest updateContactRequest){
+        validationService.validate(updateContactRequest);
+        Contact contact = repository.findFirstByUserAndId(user, updateContactRequest.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contact not found"));
+
+        contact.setFirstname(updateContactRequest.getFirstName());
+        contact.setLastname(updateContactRequest.getLastName());
+        contact.setPhone(updateContactRequest.getPhone());
+        contact.setEmail(updateContactRequest.getEmail());
+        repository.save(contact);
 
         return toContactResponse(contact);
     }
