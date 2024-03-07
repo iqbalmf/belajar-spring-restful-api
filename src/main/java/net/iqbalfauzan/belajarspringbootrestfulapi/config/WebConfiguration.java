@@ -1,4 +1,4 @@
-package net.iqbalfauzan.belajarspringbootrestfulapi;
+package net.iqbalfauzan.belajarspringbootrestfulapi.config;
 
 import net.iqbalfauzan.belajarspringbootrestfulapi.resolver.UserArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;

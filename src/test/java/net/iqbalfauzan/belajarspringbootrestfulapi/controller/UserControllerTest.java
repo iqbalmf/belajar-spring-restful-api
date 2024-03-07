@@ -99,7 +99,7 @@ class UserControllerTest {
     @DisplayName("Get user when there is token but not in database return unauthorized")
     void testUserUnauthorized() throws Exception {
         mockMvc.perform(
-                get("/api/user/current")
+                get("/api/users/current")
                         .accept(MediaType.APPLICATION_JSON)
                         .header("x-api-header", "notfound")
         ).andExpectAll(
@@ -116,7 +116,7 @@ class UserControllerTest {
     @DisplayName("Get user when there is token but not send return unauthorized")
     void testUserUnauthorized_TokenNotSent() throws Exception {
         mockMvc.perform(
-                get("/api/user/current")
+                get("/api/users/current")
                         .accept(MediaType.APPLICATION_JSON)
         ).andExpectAll(
                 status().isUnauthorized()
@@ -141,7 +141,7 @@ class UserControllerTest {
 
 
         mockMvc.perform(
-                get("/api/user/current")
+                get("/api/users/current")
                         .accept(MediaType.APPLICATION_JSON)
                         .header("x-api-header", "testtoken")
         ).andExpectAll(
@@ -167,7 +167,7 @@ class UserControllerTest {
 
 
         mockMvc.perform(
-                get("/api/user/current")
+                get("/api/users/current")
                         .accept(MediaType.APPLICATION_JSON)
                         .header("x-api-header", "testtoken")
         ).andExpectAll(
