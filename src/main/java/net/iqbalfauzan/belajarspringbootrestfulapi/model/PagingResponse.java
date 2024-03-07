@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
  * Package net.iqbalfauzan.belajarspringbootrestfulapi.model
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@NoArgsConstructor
-public class WebResponse<T> {
-    private T data;
-    private String errors;
-    private PagingResponse paging;
+public class PagingResponse {
+    private Integer currentPage;
+    private Integer totalPage;
+    private Integer size;
 }
