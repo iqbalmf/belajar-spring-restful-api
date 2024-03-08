@@ -8,16 +8,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Created by IqbalMF on 2024.
+ * Package net.iqbalfauzan.belajarspringbootrestfulapi.model.request
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateAddressRequest {
-
+public class UpdateAddressRequest {
 
     @NotBlank
     @JsonIgnore
     private String contactId;
+    @JsonIgnore
+    @NotBlank
+    private String addressId;
+
     @Size(max = 200)
     private String street;
     @Size(max = 100)
