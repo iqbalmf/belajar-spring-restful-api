@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -79,6 +80,25 @@ public class AddressService {
         addressRepository.save(address);
 
         return toAddressResponse(address);
+    }
+
+    @Transactional
+    public void delete(User user, String contactId, String addressId) {
+        Contact contact = contactRepository.findFirstByUserAndId(user, contactId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contact not found"));
+
+        Address address = addressRepository.findFirstByContactAndId(contact, addressId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Address not found"));
+        addressRepository.delete(address);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AddressResponse> getList(User user, String contactId){
+        Contact contact = contactRepository.findFirstByUserAndId(user, contactId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contact not found"));
+
+        List<Address> addresses = addressRepository.findAllByContact(contact);
+        return addresses.stream().map(this::toAddressResponse).toList();
     }
 
     private AddressResponse toAddressResponse(Address address){

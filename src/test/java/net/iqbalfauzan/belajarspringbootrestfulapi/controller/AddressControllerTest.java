@@ -22,6 +22,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -306,6 +308,163 @@ public class AddressControllerTest {
             assertEquals(request.getProvince(), response.getData().getProvince());
             assertEquals(request.getCountry(), response.getData().getCountry());
             assertEquals(request.getPostalCode(), response.getData().getPostalCode());
+        });
+    }
+
+
+    @Test
+    @DisplayName("Delete Address not found")
+    void testDeleteContactNotFound() throws Exception{
+
+        mockMvc.perform(
+                delete("/api/contacts/test/addresses/test")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("x-api-header", "testtoken")
+        ).andExpectAll(
+                status().isNotFound()
+        ).andDo(result -> {
+            WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNotNull(response.getErrors());
+        });
+    }
+
+    @Test
+    @DisplayName("Delete Address return Unauthorized")
+    void testDeleteContactUnauthorized() throws Exception{
+        Contact contact = contactRepository.findById("test").orElseThrow();
+        Address address = new Address();
+        address.setId("test");
+        address.setStreet("test");
+        address.setCity("test");
+        address.setProvince("test");
+        address.setCountry("test");
+        address.setPostalCode("test");
+        address.setContact(contact);
+        addressRepository.save(address);
+
+        mockMvc.perform(
+                delete("/api/contacts/test/addresses/test")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isUnauthorized()
+        ).andDo(result -> {
+            WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNotNull(response.getErrors());
+        });
+    }
+
+    @Test
+    @DisplayName("Delete Address return Success")
+    void testDeleteContactSuccess() throws Exception{
+        Contact contact = contactRepository.findById("test").orElseThrow();
+        Address address = new Address();
+        address.setId("test");
+        address.setStreet("test");
+        address.setCity("test");
+        address.setProvince("test");
+        address.setCountry("test");
+        address.setPostalCode("test");
+        address.setContact(contact);
+        addressRepository.save(address);
+
+        mockMvc.perform(
+                delete("/api/contacts/test/addresses/test")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("x-api-header", "testtoken")
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(result -> {
+            WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNull(response.getErrors());
+            assertEquals("OK",  response.getData());
+        });
+    }
+
+    @Test
+    @DisplayName("Get List Address return Not Found")
+    void testGetListAddressesNotFound() throws Exception{
+
+        mockMvc.perform(
+                get("/api/contacts/salah/addresses")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("x-api-header", "testtoken")
+        ).andExpectAll(
+                status().isNotFound()
+        ).andDo(result -> {
+            WebResponse<AddressResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNotNull(response.getErrors());
+        });
+    }
+
+
+    @Test
+    @DisplayName("Get List Address return Unauthorized")
+    void testGetListAddressesUnauthorized() throws Exception{
+        Contact contact = contactRepository.findById("test").orElseThrow();
+
+        for (int i = 0; i < 5; i++) {
+            Address address = new Address();
+            address.setId("test-"+i);
+            address.setStreet("test");
+            address.setCity("test");
+            address.setProvince("test");
+            address.setCountry("test");
+            address.setPostalCode("test");
+            address.setContact(contact);
+            addressRepository.save(address);
+        }
+
+        mockMvc.perform(
+                get("/api/contacts/test/addresses")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isUnauthorized()
+        ).andDo(result -> {
+            WebResponse<List<AddressResponse>> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNotNull(response.getErrors());
+        });
+    }
+
+
+    @Test
+    @DisplayName("Get List Address return Success")
+    void testGetListAddressesSuccess() throws Exception{
+        Contact contact = contactRepository.findById("test").orElseThrow();
+
+        for (int i = 0; i < 5; i++) {
+            Address address = new Address();
+            address.setId("test-"+i);
+            address.setStreet("test");
+            address.setCity("test");
+            address.setProvince("test");
+            address.setCountry("test");
+            address.setPostalCode("test");
+            address.setContact(contact);
+            addressRepository.save(address);
+        }
+
+        mockMvc.perform(
+                get("/api/contacts/test/addresses")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("x-api-header", "testtoken")
+        ).andExpectAll(
+                status().isOk()
+        ).andDo(result -> {
+            WebResponse<List<AddressResponse>> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+            });
+            assertNull(response.getErrors());
+            assertEquals(5, response.getData().size());
         });
     }
 }

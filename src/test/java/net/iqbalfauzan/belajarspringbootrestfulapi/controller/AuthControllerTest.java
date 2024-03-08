@@ -6,6 +6,8 @@ import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.LoginUserRequest;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.TokenResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.WebResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.repository.AddressRepository;
+import net.iqbalfauzan.belajarspringbootrestfulapi.repository.ContactRepository;
 import net.iqbalfauzan.belajarspringbootrestfulapi.repository.UserRepository;
 import net.iqbalfauzan.belajarspringbootrestfulapi.security.BCrypt;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,12 +37,18 @@ class AuthControllerTest {
 
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private ContactRepository contactRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Autowired
     private ObjectMapper mapper;
 
     @BeforeEach
     void setUp() {
+        addressRepository.deleteAll();
+        contactRepository.deleteAll();
         repository.deleteAll();
     }
 
