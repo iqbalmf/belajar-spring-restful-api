@@ -1,5 +1,6 @@
-package net.iqbalfauzan.belajarspringbootrestfulapi.model;
+package net.iqbalfauzan.belajarspringbootrestfulapi.model.request;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TokenResponse {
-    private String token;
-    private Long expiredAt;
+public class UpdateUserRequest {
+    @Size(max = 100)
+    private String name;
+    @Size(max = 100)
+    private String password;
 }

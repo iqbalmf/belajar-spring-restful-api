@@ -3,7 +3,6 @@ package net.iqbalfauzan.belajarspringbootrestfulapi.service;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.RegisterUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

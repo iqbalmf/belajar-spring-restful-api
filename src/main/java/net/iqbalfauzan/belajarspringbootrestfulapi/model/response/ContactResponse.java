@@ -1,4 +1,4 @@
-package net.iqbalfauzan.belajarspringbootrestfulapi.model;
+package net.iqbalfauzan.belajarspringbootrestfulapi.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

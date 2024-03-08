@@ -2,7 +2,12 @@ package net.iqbalfauzan.belajarspringbootrestfulapi.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.*;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.CreateContactRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.SearchContactRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.UpdateContactRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.ContactResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.PagingResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.WebResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

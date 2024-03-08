@@ -1,8 +1,8 @@
 package net.iqbalfauzan.belajarspringbootrestfulapi.service;
 
 import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.LoginUserRequest;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.TokenResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.LoginUserRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.TokenResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.repository.UserRepository;
 import net.iqbalfauzan.belajarspringbootrestfulapi.security.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 package net.iqbalfauzan.belajarspringbootrestfulapi.controller;
 
 import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.LoginUserRequest;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.TokenResponse;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.WebResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.LoginUserRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.TokenResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.WebResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

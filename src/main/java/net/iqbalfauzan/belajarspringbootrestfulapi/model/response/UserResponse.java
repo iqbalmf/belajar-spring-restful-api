@@ -1,6 +1,5 @@
-package net.iqbalfauzan.belajarspringbootrestfulapi.model;
+package net.iqbalfauzan.belajarspringbootrestfulapi.model.response;
 
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,12 +10,10 @@ import lombok.NoArgsConstructor;
  * Package net.iqbalfauzan.belajarspringbootrestfulapi.model
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class UpdateUserRequest {
-    @Size(max = 100)
+public class UserResponse {
+    private String username;
     private String name;
-    @Size(max = 100)
-    private String password;
 }

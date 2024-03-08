@@ -2,9 +2,9 @@ package net.iqbalfauzan.belajarspringbootrestfulapi.service;
 
 import jakarta.validation.Validator;
 import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.RegisterUserRequest;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.UpdateUserRequest;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.UserResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.RegisterUserRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.UpdateUserRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.UserResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.repository.UserRepository;
 import net.iqbalfauzan.belajarspringbootrestfulapi.security.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;

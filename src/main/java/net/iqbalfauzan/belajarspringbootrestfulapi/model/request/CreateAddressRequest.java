@@ -1,7 +1,6 @@
-package net.iqbalfauzan.belajarspringbootrestfulapi.model;
+package net.iqbalfauzan.belajarspringbootrestfulapi.model.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,19 +12,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateContactRequest {
-    @NotBlank
-    @JsonIgnore
-    private String id;
+public class CreateAddressRequest {
+
 
     @NotBlank
+    @JsonIgnore
+    private String contactId;
+    @Size(max = 200)
+    private String street;
     @Size(max = 100)
-    private String firstName;
+    private String city;
     @Size(max = 100)
-    private String lastName;
+    private String province;
     @Size(max = 100)
-    @Email
-    private String email;
-    @Size(max = 100)
-    private String phone;
+    private String country;
+    @Size(max = 10)
+    private String postalCode;
 }

@@ -1,7 +1,7 @@
 package net.iqbalfauzan.belajarspringbootrestfulapi.controller;
 
 import jakarta.validation.ConstraintViolationException;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.WebResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.WebResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

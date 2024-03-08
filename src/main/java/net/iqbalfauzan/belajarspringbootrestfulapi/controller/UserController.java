@@ -1,10 +1,10 @@
 package net.iqbalfauzan.belajarspringbootrestfulapi.controller;
 
 import net.iqbalfauzan.belajarspringbootrestfulapi.entity.User;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.RegisterUserRequest;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.UpdateUserRequest;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.UserResponse;
-import net.iqbalfauzan.belajarspringbootrestfulapi.model.WebResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.RegisterUserRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.request.UpdateUserRequest;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.UserResponse;
+import net.iqbalfauzan.belajarspringbootrestfulapi.model.response.WebResponse;
 import net.iqbalfauzan.belajarspringbootrestfulapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

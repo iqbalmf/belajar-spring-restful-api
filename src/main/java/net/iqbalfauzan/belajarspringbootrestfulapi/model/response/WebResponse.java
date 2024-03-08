@@ -1,4 +1,4 @@
-package net.iqbalfauzan.belajarspringbootrestfulapi.model;
+package net.iqbalfauzan.belajarspringbootrestfulapi.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
  * Package net.iqbalfauzan.belajarspringbootrestfulapi.model
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserResponse {
-    private String username;
-    private String name;
+@NoArgsConstructor
+public class WebResponse<T> {
+    private T data;
+    private String errors;
+    private PagingResponse paging;
 }
